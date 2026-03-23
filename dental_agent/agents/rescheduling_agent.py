@@ -3,8 +3,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langgraph.prebuilt import ToolNode
 from dental_agent.config.settings import XAI_API_KEY, MODEL_NAME, TEMPERATURE
 from dental_agent.models.state import SessionState
-from dental_agent.tools.csv_reader import get_patient_appointments, get_available_slots
-from dental_agent.tools.csv_writer import reschedule_appointment
+from dental_agent.tools.db_reader import get_patient_appointments, get_available_slots
+from dental_agent.tools.db_writer import reschedule_appointment
 from dental_agent.utils import sanitize_messages
 
 RESCHEDULE_TOOLS = [get_patient_appointments, get_available_slots, reschedule_appointment]

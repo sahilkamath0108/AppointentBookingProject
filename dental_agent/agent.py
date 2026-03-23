@@ -4,13 +4,13 @@ from langgraph.prebuilt import create_react_agent
 
 from dental_agent.config.settings import XAI_API_KEY, MODEL_NAME, TEMPERATURE
 from dental_agent.utils import sanitize_messages
-from dental_agent.tools.csv_reader import (
+from dental_agent.tools.db_reader import (
     get_available_slots,
     get_patient_appointments,
     check_slot_availability,
     list_doctors_by_specialization,
 )
-from dental_agent.tools.csv_writer import (
+from dental_agent.tools.db_writer import (
     book_appointment,
     cancel_appointment,
     reschedule_appointment,

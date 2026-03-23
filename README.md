@@ -1,7 +1,7 @@
 # Dental Scheduling Assistant
 
 Multi-agent CLI service for managing dental appointments with LangGraph and Grok-4 (xAI).  
-The assistant handles discovery, booking, cancellation, and rescheduling against a CSV schedule store.
+The assistant handles discovery, booking, cancellation, and rescheduling against a SQLite schedule store.
 
 ## Capabilities
 
@@ -27,7 +27,7 @@ Graph execution is defined in `dental_agent/workflows/graph.py` using LangGraph 
 
 - LangGraph and LangChain
 - xAI Grok-4 via `langchain-xai`
-- Pandas for CSV persistence and filtering
+- SQLite (`sqlite3`) for persistence and CRUD operations
 - Pydantic for structured routing output
 
 ## Project Layout
@@ -35,7 +35,8 @@ Graph execution is defined in `dental_agent/workflows/graph.py` using LangGraph 
 ```
 AppointentBookingProject/
 ├── main.py
-├── doctor_availability.csv
+├── appointments.db                 # Generated on first run
+├── doctor_availability.csv         # Optional bootstrap source (legacy)
 ├── requirements.txt
 └── dental_agent/
     ├── agent.py
@@ -99,9 +100,9 @@ python main.py
   - `pediatric_dentist`
   - `emergency_dentist`
 
-## Schedule Dataset
+## Schedule Data Model
 
-Data source: `doctor_availability.csv`
+Primary data source: `appointments.db` (`appointments` table)
 
 | Field | Description |
 |-------|-------------|
@@ -110,3 +111,5 @@ Data source: `doctor_availability.csv`
 | `doctor_name` | Provider full name |
 | `is_available` | Slot availability (`TRUE` / `FALSE`) |
 | `patient_to_attend` | Patient ID for booked slots |
+
+On first run, the application will bootstrap the `appointments` table from `doctor_availability.csv` if the database is empty.

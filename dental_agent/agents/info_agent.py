@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langgraph.prebuilt import ToolNode
 from dental_agent.config.settings import XAI_API_KEY, MODEL_NAME, TEMPERATURE
 from dental_agent.models.state import SessionState
-from dental_agent.tools.csv_reader import (
+from dental_agent.tools.db_reader import (
     get_available_slots,
     get_patient_appointments,
     check_slot_availability,

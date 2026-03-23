@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-CSV_PATH = str(PROJECT_ROOT / "doctor_availability.csv")
+DB_PATH = str(PROJECT_ROOT / "appointments.db")
+LEGACY_CSV_PATH = str(PROJECT_ROOT / "doctor_availability.csv")
 
 XAI_API_KEY = "API KEY"
 MODEL_NAME = os.getenv("MODEL_NAME", "grok-4")
