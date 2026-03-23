@@ -113,3 +113,6 @@ Primary data source: `appointments.db` (`appointments` table)
 | `patient_to_attend` | Patient ID for booked slots |
 
 On first run, the application will bootstrap the `appointments` table from `doctor_availability.csv` if the database is empty.
+
+Example screenshot
+<img width="1251" height="595" alt="image" src="https://github.com/user-attachments/assets/90e81768-2704-48cf-93ed-e506f5d45ed6" />
