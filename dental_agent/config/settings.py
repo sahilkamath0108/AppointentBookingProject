@@ -8,7 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DB_PATH = str(PROJECT_ROOT / "appointments.db")
 LEGACY_CSV_PATH = str(PROJECT_ROOT / "doctor_availability.csv")
 
-XAI_API_KEY = "API KEY"
+XAI_API_KEY = os.getenv("API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME", "grok-4")
 TEMPERATURE = float(os.getenv("TEMPERATURE", "0"))
 
