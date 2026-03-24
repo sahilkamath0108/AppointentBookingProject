@@ -3,9 +3,7 @@
 Multi-agent service for managing dental appointments with LangGraph and Grok-4 (xAI).  
 Supports both CLI chat and WhatsApp chat via Twilio, backed by SQLite storage.
 
-
-https://github.com/user-attachments/assets/087b0cff-98b2-4a64-b591-5f8618f390ce
-
+https://github.com/user-attachments/assets/d8b8550d-7857-44df-a71e-0d184030f1b9
 
 
 ## Capabilities
