@@ -5,8 +5,7 @@ Dental Scheduling Console
 from dotenv import load_dotenv
 load_dotenv()
 
-from langchain_core.messages import HumanMessage, AIMessageChunk
-from dental_agent.agent import dental_graph
+from dental_agent.chat_session import run_chat_turn
 
 BANNER = """
 ╔══════════════════════════════════════════════════════════╗
@@ -41,36 +40,16 @@ def run():
             print("Goodbye!")
             break
 
-        conversation_history.append(HumanMessage(content=user_input))
-
         print("\nAgent: ", end="", flush=True)
-        final_messages = None
 
         try:
-            for event_type, data in dental_graph.stream(
-                {"messages": conversation_history},
-                stream_mode=["messages", "values"],
-                config={"recursion_limit": 20},
-            ):
-                if event_type == "messages":
-                    chunk, meta = data
-                    # Stream tokens only from the agent (not tool results)
-                    if (
-                        isinstance(chunk, AIMessageChunk)
-                        and chunk.content
-                        and not getattr(chunk, "tool_calls", None)
-                    ):
-                        print(chunk.content, end="", flush=True)
-                elif event_type == "values":
-                    final_messages = data.get("messages", [])
+            response_text, updated_history = run_chat_turn(conversation_history, user_input)
         except Exception as exc:
             print(f"\nError: {exc}")
-            conversation_history.pop()  # Prevent consecutive user messages after failure
             continue
 
-        print()
-        if final_messages:
-            conversation_history = final_messages
+        print(response_text)
+        conversation_history = updated_history
 
 
 if __name__ == "__main__":

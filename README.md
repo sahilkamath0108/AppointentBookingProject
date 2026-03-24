@@ -1,7 +1,7 @@
 # Dental Scheduling Assistant
 
-Multi-agent CLI service for managing dental appointments with LangGraph and Grok-4 (xAI).  
-The assistant handles discovery, booking, cancellation, and rescheduling against a SQLite schedule store.
+Multi-agent service for managing dental appointments with LangGraph and Grok-4 (xAI).  
+Supports both CLI chat and WhatsApp chat via Twilio, backed by SQLite storage.
 
 ## Capabilities
 
@@ -35,17 +35,21 @@ Graph execution is defined in `dental_agent/workflows/graph.py` using LangGraph 
 ```
 AppointentBookingProject/
 ├── main.py
+├── app.py                           # Flask API + Twilio webhook
+├── run.py                           # Server launcher
 ├── appointments.db                 # Generated on first run
 ├── doctor_availability.csv         # Optional bootstrap source (legacy)
 ├── requirements.txt
+├── services/
+│   └── twilio_service.py
 └── dental_agent/
     ├── agent.py
     ├── config/settings.py
     ├── models/state.py
     ├── workflows/graph.py
     ├── tools/
-    │   ├── csv_reader.py
-    │   └── csv_writer.py
+    │   ├── db_reader.py
+    │   └── db_writer.py
     └── agents/
         ├── supervisor.py
         ├── info_agent.py
@@ -80,13 +84,41 @@ Create `.env` in the project root:
 XAI_API_KEY=your_api_key_here
 MODEL_NAME=grok-4
 TEMPERATURE=0
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=whatsapp:+14155238886
+PORT=5000
 ```
 
 ## Run
 
+### CLI mode
 ```bash
 python main.py
 ```
+
+### WhatsApp / API mode
+```bash
+python run.py
+```
+
+Webhook endpoint for Twilio:
+- `POST /webhook`
+
+Direct test endpoint:
+- `POST /api/chat` with JSON body:
+  - `message` (required)
+  - `user_id` (optional)
+
+Example:
+```bash
+curl -X POST http://localhost:5000/api/chat ^
+  -H "Content-Type: application/json" ^
+  -d "{\"message\":\"show available slots for orthodontist\",\"user_id\":\"demo\"}"
+```
+
+Health check:
+- `GET /health`
 
 ## Input Conventions
 
@@ -112,7 +144,4 @@ Primary data source: `appointments.db` (`appointments` table)
 | `is_available` | Slot availability (`TRUE` / `FALSE`) |
 | `patient_to_attend` | Patient ID for booked slots |
 
-On first run, the application will bootstrap the `appointments` table from `doctor_availability.csv` if the database is empty.
-
-Example screenshot
-<img width="1251" height="595" alt="image" src="https://github.com/user-attachments/assets/90e81768-2704-48cf-93ed-e506f5d45ed6" />
+On first run, the application bootstraps the `appointments` table from `doctor_availability.csv` if the database is empty.
